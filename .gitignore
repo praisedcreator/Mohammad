@@ -7,6 +7,8 @@
 *service-account*.json
 *credentials*.json
 .venv/
+.check-env/
+check-results/
 venv/
 __pycache__/
 *.py[cod]
