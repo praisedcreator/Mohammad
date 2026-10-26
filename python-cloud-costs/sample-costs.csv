@@ -1,0 +1,7 @@
+record_id,date,provider,service,environment,currency,cost
+practice-aws-001,2026-09-01,aws,EC2,dev,USD,125.50
+practice-aws-002,2026-09-02,aws,S3,dev,USD,18.25
+practice-aws-003,2026-09-03,aws,EC2,prod,USD,290.00
+practice-azure-001,2026-09-01,azure,Virtual Machines,prod,USD,410.00
+practice-azure-002,2026-09-02,azure,Blob Storage,dev,USD,45.00
+practice-gcp-001,2026-09-01,gcp,BigQuery,dev,USD,27.40
