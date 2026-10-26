@@ -15,10 +15,15 @@ SKILL = ROOT / "skills" / "inventory-review"
 
 
 def write_new_or_same(path, content):
-    if path.exists() and path.read_text(encoding="utf-8") != content:
-        raise SystemExit(f"Existing file differs; review it before replacing: {path}")
+    if path.exists():
+        existing = path.read_bytes() if isinstance(content, bytes) else path.read_text(encoding="utf-8")
+        if existing != content:
+            raise SystemExit(f"Existing file differs; review it before replacing: {path}")
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(content, encoding="utf-8", newline="\n")
+    if isinstance(content, bytes):
+        path.write_bytes(content)
+    else:
+        path.write_text(content, encoding="utf-8", newline="\n")
 
 
 def configure(client):
@@ -53,7 +58,7 @@ def configure(client):
     for target in targets:
         for source in SKILL.rglob("*"):
             if source.is_file():
-                write_new_or_same(target / source.relative_to(SKILL), source.read_text(encoding="utf-8"))
+                write_new_or_same(target / source.relative_to(SKILL), source.read_bytes())
     return targets
 
 
