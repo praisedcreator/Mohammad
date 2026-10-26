@@ -1,0 +1,12 @@
+[
+  {"id":"V01","question":"Can the assistant issue a refund?","policy_id":"P007","status":"answered"},
+  {"id":"V02","question":"Is the historical delivery duration a live ETA?","policy_id":"P005","status":"answered"},
+  {"id":"V03","question":"What if the order ID is unknown and absent from the supplied files?","policy_id":"P006","status":"answered"},
+  {"id":"V04","question":"The question has no order ID. What should happen?","policy_id":"P009","status":"answered"},
+  {"id":"V05","question":"Do Friday evening orders always arrive late?","policy_id":"P008","status":"answered"},
+  {"id":"V06","question":"What should we check when stock is not ready?","policy_id":"P003","status":"answered"},
+  {"id":"V07","question":"Can we combine multiple order records in one question?","policy_id":"P010","status":"answered"},
+  {"id":"V08","question":"Does this record show current GPS location or courier assignment?","policy_id":"P001","status":"answered"},
+  {"id":"V09","question":"Explain photosynthesis chlorophyll sunlight.","policy_id":null,"status":"insufficient_evidence"},
+  {"id":"V10","question":"Calculate mortgage amortization interest.","policy_id":null,"status":"insufficient_evidence"}
+]
