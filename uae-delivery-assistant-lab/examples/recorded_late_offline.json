@@ -1,0 +1,67 @@
+{
+  "provider": "offline",
+  "question": "What should support do about ORD-2002?",
+  "answer": {
+    "order_id": "ORD-2002",
+    "status": "recorded_late",
+    "answer": "ORD-2002 was recorded as late in Abu Dhabi. Stock was marked not ready; this does not establish why the delivery took that time. The CSV provides no current location or ETA.",
+    "action_code": "contact_dispatch",
+    "proposed_action": "Ask dispatch to review the delivery and prepare an update for a support agent. Check stock availability before offering a new estimate.",
+    "recorded_delivery_hours": null,
+    "needs_human": true,
+    "policy_ids": [
+      "P001",
+      "P002",
+      "P003"
+    ]
+  },
+  "metadata": {
+    "mode": "offline",
+    "logical_model_requests": 0
+  },
+  "context_sha256": "f0fabf23b505f8e6a474f09a5e9d7e2de5913c8f09548b90982a7d919b84a9e2",
+  "instructions_sha256": "4b7e4332a0b94254aa23356328836616daa2ff16fc3560bef7ff59f3e7fb4a0e",
+  "context": {
+    "question": "What should support do about ORD-2002?",
+    "requested_order_ids": [
+      "ORD-2002"
+    ],
+    "order": {
+      "Order_ID": "ORD-2002",
+      "Emirate": "Abu_Dhabi",
+      "Distance_km": 28,
+      "Stock_Ready": "No",
+      "Friday_Evening": "Yes",
+      "Delivered_Late": "Yes",
+      "record_type": "classification",
+      "source_file": "uae_delivery_classification.csv"
+    },
+    "policies": [
+      {
+        "id": "P001",
+        "title": "Use recorded facts",
+        "text": "These CSV files contain historical practice records. They contain no current GPS position, courier assignment, dispatch timestamp or live ETA. Report the recorded outcome or duration. Do not describe an old record as a live delivery update. Do not infer a cause of delay from distance, emirate, Friday evening or stock readiness."
+      },
+      {
+        "id": "P002",
+        "title": "Recorded late order",
+        "text": "When Delivered_Late is Yes, report that the order was recorded as late. Recommend asking dispatch to review the delivery and prepare an update for a support agent. Do not claim that dispatch has already been contacted."
+      },
+      {
+        "id": "P003",
+        "title": "Stock not ready",
+        "text": "When Stock_Ready is No, recommend checking stock availability and dispatch readiness before offering a new delivery estimate. Stock readiness alone does not establish the cause of a late delivery."
+      }
+    ],
+    "required_policy_ids": [
+      "P001",
+      "P002",
+      "P003"
+    ],
+    "data_scope": "synthetic historical practice data"
+  },
+  "checks": {
+    "schema_and_record_fields_valid": true,
+    "free_text_requires_human_review": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "scope": "Local validation only; no live cloud model requests were made.",
+  "python": "3.12.5",
+  "packages": {
+    "openai": "3.31.0",
+    "google-genai": "2.32.0",
+    "azure-identity": "1.26.0",
+    "pydantic": "2.14.1",
+    "python-dotenv": "1.2.4"
+  },
+  "unit_and_mocked_http_tests_passed": 12,
+  "offline_evaluation_cases_passed": 20,
+  "cloud_account_configuration": "Supplied by the learner in .env and local CLI authentication.",
+  "live_cloud_success_evidence": "Created only when the learner runs the cloud exercises successfully."
+}

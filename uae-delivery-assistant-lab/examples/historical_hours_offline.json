@@ -1,0 +1,67 @@
+{
+  "provider": "offline",
+  "question": "Is ORD-3002 arriving in 26 hours?",
+  "answer": {
+    "order_id": "ORD-3002",
+    "status": "historical_duration",
+    "answer": "ORD-3002 has a recorded delivery duration of 26.0 hours. This is historical, not a current ETA. No promised deadline is supplied, so this does not tell us whether it was late. Stock was marked not ready; this does not establish why the delivery took that time.",
+    "action_code": "review_record",
+    "proposed_action": "Review the historical record; obtain live information for a current delivery. Check stock availability before offering a new estimate.",
+    "recorded_delivery_hours": 26.0,
+    "needs_human": false,
+    "policy_ids": [
+      "P001",
+      "P005",
+      "P003"
+    ]
+  },
+  "metadata": {
+    "mode": "offline",
+    "logical_model_requests": 0
+  },
+  "context_sha256": "1b8853a052f2f638fc70f9421c371eec92636956d5b71ce2b10013e9d51e4219",
+  "instructions_sha256": "4b7e4332a0b94254aa23356328836616daa2ff16fc3560bef7ff59f3e7fb4a0e",
+  "context": {
+    "question": "Is ORD-3002 arriving in 26 hours?",
+    "requested_order_ids": [
+      "ORD-3002"
+    ],
+    "order": {
+      "Order_ID": "ORD-3002",
+      "Emirate": "Abu_Dhabi",
+      "Distance_km": 28,
+      "Stock_Ready": "No",
+      "Friday_Evening": "Yes",
+      "Delivery_Hours": 26.0,
+      "record_type": "duration",
+      "source_file": "uae_delivery_regression.csv"
+    },
+    "policies": [
+      {
+        "id": "P001",
+        "title": "Use recorded facts",
+        "text": "These CSV files contain historical practice records. They contain no current GPS position, courier assignment, dispatch timestamp or live ETA. Report the recorded outcome or duration. Do not describe an old record as a live delivery update. Do not infer a cause of delay from distance, emirate, Friday evening or stock readiness."
+      },
+      {
+        "id": "P003",
+        "title": "Stock not ready",
+        "text": "When Stock_Ready is No, recommend checking stock availability and dispatch readiness before offering a new delivery estimate. Stock readiness alone does not establish the cause of a late delivery."
+      },
+      {
+        "id": "P005",
+        "title": "Historical delivery hours",
+        "text": "Delivery_Hours is the duration already recorded for an ORD-3000-series practice order. It is not the remaining time for a current order. No promised delivery deadline is supplied, so do not decide whether a duration was late. Do not join ORD-2000-series and ORD-3000-series rows by their final digits."
+      }
+    ],
+    "required_policy_ids": [
+      "P001",
+      "P005",
+      "P003"
+    ],
+    "data_scope": "synthetic historical practice data"
+  },
+  "checks": {
+    "schema_and_record_fields_valid": true,
+    "free_text_requires_human_review": true
+  }
+}

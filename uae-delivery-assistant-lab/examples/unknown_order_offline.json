@@ -1,0 +1,51 @@
+{
+  "provider": "offline",
+  "question": "Look up ORD-9999.",
+  "answer": {
+    "order_id": "ORD-9999",
+    "status": "not_found",
+    "answer": "ORD-9999 is not in the supplied practice records.",
+    "action_code": "verify_order_id",
+    "proposed_action": "Ask a support agent to verify the order ID.",
+    "recorded_delivery_hours": null,
+    "needs_human": true,
+    "policy_ids": [
+      "P001",
+      "P006"
+    ]
+  },
+  "metadata": {
+    "mode": "offline",
+    "logical_model_requests": 0
+  },
+  "context_sha256": "e6a5c616e5caede8b81f6be64289cf31125506338e41869abddd65f5a89e069c",
+  "instructions_sha256": "4b7e4332a0b94254aa23356328836616daa2ff16fc3560bef7ff59f3e7fb4a0e",
+  "context": {
+    "question": "Look up ORD-9999.",
+    "requested_order_ids": [
+      "ORD-9999"
+    ],
+    "order": null,
+    "policies": [
+      {
+        "id": "P001",
+        "title": "Use recorded facts",
+        "text": "These CSV files contain historical practice records. They contain no current GPS position, courier assignment, dispatch timestamp or live ETA. Report the recorded outcome or duration. Do not describe an old record as a live delivery update. Do not infer a cause of delay from distance, emirate, Friday evening or stock readiness."
+      },
+      {
+        "id": "P006",
+        "title": "Unknown order",
+        "text": "When an order ID is absent from the supplied files, report not found and recommend verifying the ID with a support agent. Do not invent an order, copy another order's details or silently substitute a similar ID."
+      }
+    ],
+    "required_policy_ids": [
+      "P001",
+      "P006"
+    ],
+    "data_scope": "synthetic historical practice data"
+  },
+  "checks": {
+    "schema_and_record_fields_valid": true,
+    "free_text_requires_human_review": true
+  }
+}
