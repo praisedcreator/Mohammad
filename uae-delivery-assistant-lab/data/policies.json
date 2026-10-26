@@ -1,0 +1,52 @@
+[
+  {
+    "id": "P001",
+    "title": "Use recorded facts",
+    "text": "These CSV files contain historical practice records. They contain no current GPS position, courier assignment, dispatch timestamp or live ETA. Report the recorded outcome or duration. Do not describe an old record as a live delivery update. Do not infer a cause of delay from distance, emirate, Friday evening or stock readiness."
+  },
+  {
+    "id": "P002",
+    "title": "Recorded late order",
+    "text": "When Delivered_Late is Yes, report that the order was recorded as late. Recommend asking dispatch to review the delivery and prepare an update for a support agent. Do not claim that dispatch has already been contacted."
+  },
+  {
+    "id": "P003",
+    "title": "Stock not ready",
+    "text": "When Stock_Ready is No, recommend checking stock availability and dispatch readiness before offering a new delivery estimate. Stock readiness alone does not establish the cause of a late delivery."
+  },
+  {
+    "id": "P004",
+    "title": "Recorded not late order",
+    "text": "When Delivered_Late is No, report that the practice record is marked not late. Recommend reviewing the recorded facts if a customer disputes them. Do not turn this historical label into a claim about the order's present location or status."
+  },
+  {
+    "id": "P005",
+    "title": "Historical delivery hours",
+    "text": "Delivery_Hours is the duration already recorded for an ORD-3000-series practice order. It is not the remaining time for a current order. No promised delivery deadline is supplied, so do not decide whether a duration was late. Do not join ORD-2000-series and ORD-3000-series rows by their final digits."
+  },
+  {
+    "id": "P006",
+    "title": "Unknown order",
+    "text": "When an order ID is absent from the supplied files, report not found and recommend verifying the ID with a support agent. Do not invent an order, copy another order's details or silently substitute a similar ID."
+  },
+  {
+    "id": "P007",
+    "title": "Refunds and external actions",
+    "text": "The lab defines no refund entitlement. A human must review refund requests. The assistant may recommend an action, but cannot issue a refund, send a message, change an order or claim that any of those actions happened."
+  },
+  {
+    "id": "P008",
+    "title": "Friday evening",
+    "text": "Friday_Evening describes a practice-record attribute. It is not a rule that every Friday-evening order is late. Use the actual Delivered_Late label when it is available and do not invent a causal explanation."
+  },
+  {
+    "id": "P009",
+    "title": "Missing order ID",
+    "text": "When the question contains no order ID, ask for an ID in the form ORD-2002. Explain that the assistant needs an ID to look up an individual order."
+  },
+  {
+    "id": "P010",
+    "title": "One order at a time",
+    "text": "This starter assistant handles one order per question. When more than one different order ID is supplied, ask which one to review first. Do not combine facts from different rows."
+  }
+]

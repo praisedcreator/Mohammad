@@ -1,0 +1,13 @@
+Order_ID,Emirate,Distance_km,Stock_Ready,Friday_Evening,Delivered_Late
+ORD-2001,Dubai,5,Yes,No,No
+ORD-2002,Abu_Dhabi,28,No,Yes,Yes
+ORD-2003,Sharjah,12,Yes,Yes,No
+ORD-2004,Dubai,35,No,No,Yes
+ORD-2005,Ajman,9,Yes,No,No
+ORD-2006,Abu_Dhabi,22,No,Yes,Yes
+ORD-2007,Sharjah,16,Yes,No,No
+ORD-2008,Dubai,31,No,Yes,Yes
+ORD-2009,Al_Ain,18,Yes,No,No
+ORD-2010,Ajman,27,No,Yes,Yes
+ORD-2011,Dubai,14,Yes,Yes,No
+ORD-2012,Sharjah,33,No,No,Yes

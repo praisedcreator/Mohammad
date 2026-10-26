@@ -1,0 +1,13 @@
+Order_ID,Emirate,Distance_km,Stock_Ready,Friday_Evening,Delivery_Hours
+ORD-3001,Dubai,5,Yes,No,4.0
+ORD-3002,Abu_Dhabi,28,No,Yes,26.0
+ORD-3003,Sharjah,12,Yes,Yes,10.0
+ORD-3004,Dubai,35,No,No,24.0
+ORD-3005,Ajman,9,Yes,No,7.0
+ORD-3006,Abu_Dhabi,22,No,Yes,21.0
+ORD-3007,Sharjah,16,Yes,No,12.0
+ORD-3008,Dubai,31,No,Yes,25.0
+ORD-3009,Al_Ain,18,Yes,No,13.0
+ORD-3010,Ajman,27,No,Yes,22.0
+ORD-3011,Dubai,14,Yes,Yes,11.0
+ORD-3012,Sharjah,33,No,No,23.0
