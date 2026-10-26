@@ -1,0 +1,4 @@
+# Official MCP Python SDK, with the command-line developer tools.
+# The constraints file pins the dependency versions tested on Windows/Python 3.12.
+-c requirements.lock.txt
+mcp[cli]==2.3.0

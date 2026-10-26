@@ -1,0 +1,25 @@
+{
+  "release": "1.0.0",
+  "validated_at_utc": "2026-10-19T20:32:21.679697+00:00",
+  "python": "3.12.5",
+  "platform": "Windows",
+  "mcp_sdk": "2.3.0",
+  "business_and_configuration_tests": {
+    "result": "PASS",
+    "count": 13
+  },
+  "skill_format_validation": "PASS",
+  "stdio_integration": {
+    "current_protocol": "2026-07-28",
+    "legacy_protocol": "2025-11-25",
+    "result": "PASS"
+  },
+  "review_cli": {
+    "result": "PASS",
+    "simulation_requires_approval": true,
+    "repeated_simulation_is_idempotent": true
+  },
+  "interactive_coding_client_session_tested": false,
+  "actual_model_api_calls": false,
+  "real_inventory_or_erp_writes": false
+}
