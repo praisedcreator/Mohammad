@@ -1,0 +1,113 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Practice S3 event metadata intake with deduplication and a failure queue
+
+Resources:
+  IntakeBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  TransportPolicy:
+    Type: AWS::S3::BucketPolicy
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Bucket: !Ref IntakeBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: RequireTLS
+            Effect: Deny
+            Principal: '*'
+            Action: s3:*
+            Resource:
+              - !GetAtt IntakeBucket.Arn
+              - !Sub '${IntakeBucket.Arn}/*'
+            Condition:
+              Bool:
+                aws:SecureTransport: 'false'
+
+  MetadataTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+      SSESpecification:
+        SSEEnabled: true
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+
+  FailureQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      SqsManagedSseEnabled: true
+      MessageRetentionPeriod: 1209600
+
+  Processor:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: python3.12
+      Handler: app.handler
+      CodeUri: src/
+      Timeout: 30
+      MemorySize: 128
+      ReservedConcurrentExecutions: 2
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref MetadataTable
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: dynamodb:PutItem
+              Resource: !GetAtt MetadataTable.Arn
+      DeadLetterQueue:
+        Type: SQS
+        TargetArn: !GetAtt FailureQueue.Arn
+      Events:
+        IncomingObject:
+          Type: S3
+          Properties:
+            Bucket: !Ref IntakeBucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: incoming/
+
+  ProcessorLogs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${Processor}'
+      RetentionInDays: 14
+
+Outputs:
+  BucketName:
+    Value: !Ref IntakeBucket
+  TableName:
+    Value: !Ref MetadataTable
+  FailureQueueUrl:
+    Value: !Ref FailureQueue

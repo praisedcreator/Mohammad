@@ -1,0 +1,12 @@
+{
+  "Records": [
+    {
+      "eventSource": "aws:s3",
+      "eventName": "ObjectCreated:Put",
+      "s3": {
+        "bucket": {"name": "portfolio-practice-intake"},
+        "object": {"key": "incoming%2Fpractice+report.txt", "size": 128, "versionId": "practice-version-1", "sequencer": "00AF"}
+      }
+    }
+  ]
+}
