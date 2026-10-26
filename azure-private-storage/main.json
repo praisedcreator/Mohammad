@@ -1,0 +1,209 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.48.1.52935",
+      "templateHash": "9766615455872160388"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for regional resources. The DNS zone remains global."
+      }
+    },
+    "workloadName": {
+      "type": "string",
+      "defaultValue": "portfolio",
+      "minLength": 3,
+      "maxLength": 20,
+      "metadata": {
+        "description": "Short name used for network resources; choose a unique name per deployment."
+      }
+    }
+  },
+  "variables": {
+    "storageName": "[format('st{0}', uniqueString(resourceGroup().id, parameters('workloadName')))]",
+    "endpointSubnetName": "private-endpoints"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2023-05-01",
+      "name": "[variables('storageName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "supportsHttpsTrafficOnly": true,
+        "minimumTlsVersion": "TLS1_2",
+        "allowBlobPublicAccess": false,
+        "allowSharedKeyAccess": false,
+        "defaultToOAuthAuthentication": true,
+        "publicNetworkAccess": "Disabled",
+        "networkAcls": {
+          "defaultAction": "Deny",
+          "bypass": "None"
+        },
+        "encryption": {
+          "keySource": "Microsoft.Storage",
+          "services": {
+            "blob": {
+              "enabled": true,
+              "keyType": "Account"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices",
+      "apiVersion": "2023-05-01",
+      "name": "[format('{0}/{1}', variables('storageName'), 'default')]",
+      "properties": {
+        "isVersioningEnabled": true,
+        "deleteRetentionPolicy": {
+          "enabled": true,
+          "days": 7
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2023-05-01",
+      "name": "[format('{0}/{1}/{2}', variables('storageName'), 'default', 'documents')]",
+      "properties": {
+        "publicAccess": "None"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageName'), 'default')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2024-05-01",
+      "name": "[format('{0}-vnet', parameters('workloadName'))]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.42.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('endpointSubnetName')]",
+            "properties": {
+              "addressPrefix": "10.42.1.0/24",
+              "privateEndpointNetworkPolicies": "Disabled"
+            }
+          },
+          {
+            "name": "workloads",
+            "properties": {
+              "addressPrefix": "10.42.2.0/24"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints",
+      "apiVersion": "2024-05-01",
+      "name": "[format('{0}-blob-pe', parameters('workloadName'))]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "subnet": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', format('{0}-vnet', parameters('workloadName')), variables('endpointSubnetName'))]"
+        },
+        "privateLinkServiceConnections": [
+          {
+            "name": "blob",
+            "properties": {
+              "privateLinkServiceId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
+              "groupIds": [
+                "blob"
+              ]
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('workloadName')))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/privateDnsZones",
+      "apiVersion": "2020-06-01",
+      "name": "[format('privatelink.blob.{0}', environment().suffixes.storage)]",
+      "location": "global"
+    },
+    {
+      "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+      "apiVersion": "2020-06-01",
+      "name": "[format('{0}/{1}', format('privatelink.blob.{0}', environment().suffixes.storage), format('{0}-link', parameters('workloadName')))]",
+      "location": "global",
+      "properties": {
+        "registrationEnabled": false,
+        "virtualNetwork": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('workloadName')))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('workloadName')))]",
+        "[resourceId('Microsoft.Network/privateDnsZones', format('privatelink.blob.{0}', environment().suffixes.storage))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+      "apiVersion": "2024-05-01",
+      "name": "[format('{0}/{1}', format('{0}-blob-pe', parameters('workloadName')), 'default')]",
+      "properties": {
+        "privateDnsZoneConfigs": [
+          {
+            "name": "blob",
+            "properties": {
+              "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', format('privatelink.blob.{0}', environment().suffixes.storage))]"
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/privateEndpoints', format('{0}-blob-pe', parameters('workloadName')))]",
+        "[resourceId('Microsoft.Network/privateDnsZones', format('privatelink.blob.{0}', environment().suffixes.storage))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "storageAccountName": {
+      "type": "string",
+      "value": "[variables('storageName')]"
+    },
+    "blobEndpoint": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), '2023-05-01').primaryEndpoints.blob]"
+    },
+    "containerName": {
+      "type": "string",
+      "value": "documents"
+    },
+    "virtualNetworkId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('workloadName')))]"
+    },
+    "privateEndpointId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/privateEndpoints', format('{0}-blob-pe', parameters('workloadName')))]"
+    }
+  }
+}
