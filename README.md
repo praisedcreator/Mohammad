@@ -1,5 +1,7 @@
 # Generative AI and Cloud Engineering Portfolio
 
+<img src="docs/assets/mohammad-khalique.jpg" alt="Mohammad Khalique" width="140" align="right" />
+
 [![Portfolio checks](https://github.com/praisedcreator/Mohammad/actions/workflows/ci.yml/badge.svg)](https://github.com/praisedcreator/Mohammad/actions/workflows/ci.yml)
 
 Practical Python proofs of concept and technical enablement material by **Mohammad Khalique**. Explore LLM applications, RAG, tool-using agents and cloud integrations through source code, guided demonstrations and reproducible checks.
@@ -104,6 +106,6 @@ These are educational prototypes, not production deployments. The delivery recor
 
 ## License
 
-The original code and documentation are available under the [MIT license](LICENSE). Dependencies, third-party models, SDKs and linked resources retain their own terms.
+The original code and documentation are available under the [MIT license](LICENSE). Dependencies, third-party models, SDKs and linked resources retain their own terms. The portrait is excluded from the MIT software license.
 
 [Professional portfolio](https://sites.google.com/view/mohammad-khalique-ai-training/home) · [LinkedIn](https://www.linkedin.com/in/mohammad-khalique-8398aa1a/)
