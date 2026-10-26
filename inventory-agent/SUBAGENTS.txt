@@ -1,0 +1,122 @@
+SUB-AGENTS: WHAT, WHY, AND HOW TO BUILD
+
+A sub-agent is a specialist model session that a parent agent delegates a task to.
+Give it a defined objective, its own conversation, a limited tool allowlist, an
+output contract, and a budget. It investigates and returns findings to the parent.
+
+A tool performs a defined operation, such as reading a stock record. A sub-agent
+uses a model to choose steps and interpret evidence for a delegated objective.
+The parent remains responsible for combining results into the overall proposal.
+
+The parent and child can call the same Claude model through the same Vertex AI
+client. They have different prompts, contexts and capabilities. You do not need
+to train a new model or create another cloud endpoint to create a sub-agent.
+There are additional model API requests, even when the same endpoint is used.
+
+PURPOSE
+
+Use specialists when a task benefits from focused context and tools, a distinct
+research objective, or several independent investigations. Independent specialists
+can run concurrently when your runtime supports it. Measure quality, latency and
+cost against a single-agent baseline before keeping the extra orchestration.
+
+For the current straightforward transfer calculation, the original agent plus
+tools is a suitable baseline. This optional extension demonstrates a policy
+specialist; add it when policy interpretation needs a separate investigation.
+
+INVENTORY EXAMPLE
+
+Parent inventory agent: investigate the warehouse exception, choose whether to
+delegate policy research, read canonical stock/policy, evaluate the transfer,
+and submit a proposal for human review.
+
+Policy sub-agent: read the transfer policy, explain relevant limits/approval roles,
+and return evidence references and uncertainties. It has only get_policy and
+return_findings. The application rejects any invented proposal/approval/ERP tool.
+
+Perplexity: remains an optional public research tool on the parent. A future
+research specialist could use it through a separate restricted tool registry.
+Perplexity does not automatically become a sub-agent just because it is called.
+
+Python: validates canonical quantities and policy, stores state, and enforces the
+review boundary. The child cannot replace those checks or authorize the transfer.
+
+Human procurement reviewer: approves or rejects the exact proposal. This example
+retains the existing demo identity and simulation-only execution limitations.
+
+IMPLEMENTATION
+
+1. Define the specialist's objective in SPECIALIST_SYSTEM in subagents.py.
+2. Define its permitted tools and structured return_findings output.
+3. Advertise delegate_policy_review as a tool on the parent model request.
+4. When the parent requests that tool, PolicyDelegation.call starts a fresh child
+   conversation containing only the authorized case and delegated question.
+5. Run the child's tool loop. Enforce its allowlist and schemas in Python.
+6. Return findings, uncertainty and policy references as the parent's tool_result.
+7. The parent resumes its investigation and independently validates canonical
+   records before submitting the proposal. Human approval still follows.
+
+The optional hook is run_vertex(..., delegation=handler). Omitting it keeps the
+original single-agent behavior. No managed-agents platform API is required;
+this example uses ordinary Claude Messages calls through Vertex AI.
+
+Conceptual integration (client is your configured AnthropicVertex client):
+
+  runtime = Runtime(FixtureServices(), output_directory)
+  specialist = PolicyDelegation(runtime, client, model_id)
+  run_vertex(runtime, client=client, model=model_id, delegation=specialist)
+
+Close runtime.connection after use; see subagents.py's main function.
+
+RUN THE OFFLINE DEMONSTRATION
+
+From the inventory-agent directory:
+
+  python subagents.py --demo --out runs/subagent-demo-001
+
+This is a scripted replay of four parent requests and two child requests; no
+model or external service API is called. It writes proposal.json, state.sqlite
+and trace.jsonl and stops at AWAITING_REVIEW. Use a new output directory per run.
+The example remains a 240-unit transfer from Abu Dhabi to Dubai.
+
+The replay demonstrates the protocol and permission boundary. It does not prove
+that a real model will choose the same tools or produce an equally good proposal.
+
+RUN WITH CLAUDE ON VERTEX
+
+Follow README.txt's SDK installation, Google authentication, enabled model ID and
+supported endpoint setup. Then run:
+
+  python subagents.py --live --out runs/subagent-live-001
+
+This calls the actual Claude model for parent and child, while inventory and
+policy services remain fictional fixtures. Existing live HTTP adapters can be
+passed to Runtime instead after mapping your service contracts. Production
+projections, authenticated review and the ERP executor remain integration work.
+
+LIMITS AND TRACE
+
+Default child limits: two delegations per parent run, four model rounds and six
+tool calls per child. Children have no delegation tool, so no nested spawning.
+Each model request caps its output tokens. Add a total elapsed-time and monetary
+budget appropriate to your deployment alongside the existing SDK timeouts.
+
+The shared trace records parent run ID, parent tool-call ID, child ID, task,
+tool calls/results, response IDs, usage, errors and returned findings. It logs
+observable events and short business findings. Replay requests are explicitly
+marked actual_model_call=false. Access and retention controls from README.txt
+apply to these traces as well.
+
+TEST
+
+  python -m unittest -q test_agent.py test_subagents.py
+
+The tests use fake model responses and local data. They cover scoped tools,
+separate child context, budgets, hierarchical trace IDs, and human approval.
+The live cloud API has not been exercised by the offline demonstration.
+
+OFFICIAL REFERENCES (checked 2026-10-16)
+
+https://www.anthropic.com/engineering/building-effective-agents
+https://www.anthropic.com/engineering/multi-agent-research-system
+https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai

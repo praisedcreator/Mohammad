@@ -1,0 +1,28 @@
+{
+  "case": {"exception_id": "EX-DEMO-001", "sku": "SKU-DEMO-100", "destination": "DXB-WH", "source": "AUH-WH"},
+  "inventory": {
+    "version": "inventory-demo-v1",
+    "sku": "SKU-DEMO-100",
+    "inventory_valid": true,
+    "forecast_valid": true,
+    "forecast_source": "DEMO_CONSTANT_DEMAND",
+    "unit": "EA",
+    "destination": {"site": "DXB-WH", "on_hand": 100, "reserved": 20, "blocked": 0, "daily_demand": 40, "confirmed_inbound_before_arrival": 0},
+    "source": {"site": "AUH-WH", "on_hand": 660, "reserved": 60, "blocked": 0, "daily_demand": 30},
+    "route": {"transit_days": 1, "transport_cost_minor": 30000, "currency": "AED"},
+    "supplier_lead_days": 10
+  },
+  "policy": {
+    "version": "transfer-policy-demo-v3",
+    "document_id": "POL-DEMO-TRANSFER",
+    "excerpt": "Transfers require procurement review. Preserve at least seven days of source cover. Target seven days of destination cover after arrival; allow at most ten. Transport cost limit AED 500. Quantities must be multiples of ten.",
+    "source_min_cover_days": 7,
+    "destination_target_cover_days": 7,
+    "destination_max_cover_days": 10,
+    "max_transport_cost_minor": 50000,
+    "currency": "AED",
+    "pack_size": 10,
+    "max_quantity": 1000,
+    "approval_group": "procurement"
+  }
+}
