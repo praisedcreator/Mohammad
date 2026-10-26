@@ -1,5 +1,9 @@
 # Evaluation Evidence and Limits
 
+## Latest local verification
+
+[Verification record dated 26 October 2026](validation-2026-10-26.json): 48 unit, business-rule and mocked-HTTP tests passed across the delivery assistant, inventory agent and MCP toolkit. The delivery assistant also passed 20 deterministic offline cases, and the MCP server passed a separate STDIO integration check. These checks use practice data and make no live model calls; they do not measure live model quality or production performance.
+
 ## Recorded project checks
 
 | Project | Available evidence | What it establishes |

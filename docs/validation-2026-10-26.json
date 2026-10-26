@@ -1,0 +1,16 @@
+{
+  "verified_on": "2026-10-26",
+  "scope": "Local tests with practice fixtures, scripted models and mocked provider HTTP requests",
+  "checks": [
+    {"project": "uae-delivery-assistant-lab", "command": "python -m unittest discover -s tests -v", "passed": 12},
+    {"project": "uae-delivery-assistant-lab", "command": "python evaluate.py --provider offline", "passed": 20, "kind": "deterministic offline evaluation cases"},
+    {"project": "inventory-agent", "command": "python -m unittest -v test_agent.py test_subagents.py", "passed": 23},
+    {"project": "inventory-mcp-starter", "command": "python -m unittest -v test_inventory.py", "passed": 13},
+    {"project": "inventory-mcp-starter", "command": "python smoke_test.py", "result": "PASS", "transport": "stdio subprocess", "protocol_version": "2026-07-28", "sdk_version": "2.3.0"}
+  ],
+  "unit_business_and_mocked_http_tests_passed": 48,
+  "actual_cloud_model_calls": false,
+  "actual_inventory_execution": false,
+  "retail_dashboard_live_deployment_verified": false,
+  "live_model_quality_or_business_savings_measured": false
+}
