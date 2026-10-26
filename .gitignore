@@ -1,0 +1,24 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*service-account*.json
+*credentials*.json
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.runtime/
+runs/
+results/
+*.sqlite
+*.sqlite3
+*.db
+.codex/
+.claude/
+.mcp.json
+.DS_Store
+Thumbs.db
