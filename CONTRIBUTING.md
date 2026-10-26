@@ -8,11 +8,13 @@ Use Python 3.12 and a dedicated virtual environment. From the repository root:
 
 ```powershell
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r uae-delivery-assistant-lab/requirements.txt -r inventory-mcp-starter/requirements.txt -r vector-rag-lab/requirements-aws.txt
+.\.venv\Scripts\python.exe -m pip install -r uae-delivery-assistant-lab/requirements.txt -r inventory-mcp-starter/requirements.txt -r vector-rag-lab/requirements-aws.txt -r tools/requirements-checks.txt
 .\.venv\Scripts\python.exe tools/run_checks.py
 ```
 
 On macOS/Linux, replace `.\.venv\Scripts\python.exe` with `.venv/bin/python`. The checks use local fixtures, scripted models and SDK stubs; cloud credentials are not required.
+
+Linux health-check execution tests run on Linux, or when an installed Bash path is explicitly supplied through `PORTFOLIO_BASH`. CI also recompiles the Azure Bicep source with the pinned Microsoft compiler and compares it with committed ARM JSON. Keep the generated JSON synchronized with the Bicep source.
 
 ## Pull requests
 
