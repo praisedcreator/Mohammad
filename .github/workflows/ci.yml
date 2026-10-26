@@ -38,7 +38,30 @@ jobs:
             inventory-mcp-starter/requirements.txt
             inventory-mcp-starter/requirements.lock.txt
             vector-rag-lab/requirements-aws.txt
+            tools/requirements-checks.txt
       - name: Install test dependencies
-        run: python -m pip install -r uae-delivery-assistant-lab/requirements.txt -r inventory-mcp-starter/requirements.txt -r vector-rag-lab/requirements-aws.txt
+        run: python -m pip install -r uae-delivery-assistant-lab/requirements.txt -r inventory-mcp-starter/requirements.txt -r vector-rag-lab/requirements-aws.txt -r tools/requirements-checks.txt
       - name: Run local, mocked SDK, retrieval and MCP integration checks
         run: python tools/run_checks.py
+
+  bicep-validation:
+    name: Azure Bicep compilation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Compile and compare the Azure deployment template
+        shell: bash
+        run: |
+          curl --fail --location --silent --show-error --output "$RUNNER_TEMP/bicep" https://github.com/Azure/bicep/releases/download/v0.48.1/bicep-linux-x64
+          printf 'b09ec25a9d376c1f8e33ede6ed22b587f915ad68488d5db77a6f9541748c7f6e  %s\n' "$RUNNER_TEMP/bicep" | sha256sum --check
+          chmod +x "$RUNNER_TEMP/bicep"
+          "$RUNNER_TEMP/bicep" build azure-private-storage/main.bicep --outfile "$RUNNER_TEMP/storage-main.json"
+          python azure-private-storage/validate.py --compiled "$RUNNER_TEMP/storage-main.json" --compare azure-private-storage/main.json
