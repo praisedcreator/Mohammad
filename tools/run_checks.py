@@ -15,6 +15,11 @@ CHECKS = [
     ("inventory_mcp_stdio", "inventory-mcp-starter", ["smoke_test.py"]),
     ("vector_rag_unit", "vector-rag-lab", ["-m","unittest","-v","test_rag.py"]),
     ("vector_retrieval_cases", "vector-rag-lab", ["rag.py","--evaluate"]),
+    ("aws_intake_unit", "aws-file-intake", ["-m","unittest","-v","test_intake.py"]),
+    ("aws_template_lint", "aws-file-intake", ["-c","from cfnlint.runner import main; main()","-t","template.yaml"]),
+    ("azure_storage_guardrails", "azure-private-storage", ["-m","unittest","-v","test_storage.py"]),
+    ("linux_healthcheck", "linux-healthcheck", ["-m","unittest","-v","test_healthcheck.py"]),
+    ("python_cloud_costs", "python-cloud-costs", ["-m","unittest","-v","test_costs.py"]),
 ]
 
 
