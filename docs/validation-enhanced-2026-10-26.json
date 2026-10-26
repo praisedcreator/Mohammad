@@ -1,0 +1,42 @@
+{
+  "checks": [
+    {
+      "check": "delivery_unit",
+      "passed": true
+    },
+    {
+      "check": "delivery_offline_cases",
+      "passed": true
+    },
+    {
+      "check": "inventory_agent_unit",
+      "passed": true
+    },
+    {
+      "check": "inventory_mcp_unit",
+      "passed": true
+    },
+    {
+      "check": "inventory_mcp_stdio",
+      "passed": true
+    },
+    {
+      "check": "vector_rag_unit",
+      "passed": true
+    },
+    {
+      "check": "vector_retrieval_cases",
+      "passed": true
+    },
+    {
+      "check": "documentation_relative_links",
+      "passed": true
+    }
+  ],
+  "all_passed": true,
+  "actual_cloud_model_calls": false,
+  "verified_on": "2026-10-26",
+  "unit_business_and_sdk_tests_passed": 72,
+  "offline_cases_passed": 30,
+  "live_cloud_inference_verified": false
+}

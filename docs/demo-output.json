@@ -1,0 +1,24 @@
+{
+  "mode": "local TF-IDF; no cloud requests",
+  "examples": [
+    {
+      "status": "answered",
+      "answer": "The lab defines no refund entitlement. A human must review refund requests. The assistant may recommend an action, but cannot issue a refund, send a message, change an order or claim that any of those actions happened.",
+      "citations": [
+        {
+          "chunk_id": "P007:0000",
+          "source": "uae-delivery-assistant-lab/data/policies.json#P007"
+        }
+      ],
+      "generation": "extractive_local_demo",
+      "question": "Can the assistant issue a refund?"
+    },
+    {
+      "status": "insufficient_evidence",
+      "answer": "No sufficiently matching policy was found. Ask a human to review the question.",
+      "citations": [],
+      "generation": "none",
+      "question": "Explain photosynthesis chlorophyll sunlight."
+    }
+  ]
+}

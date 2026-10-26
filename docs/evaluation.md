@@ -2,6 +2,8 @@
 
 ## Latest local verification
 
+[Enhanced verification record](validation-enhanced-2026-10-26.json) includes the additional vector retrieval and AWS SDK contract checks. The [CI workflow](../.github/workflows/ci.yml) runs the same credential-free checks; its GitHub status is live and separate from the recorded local result.
+
 [Verification record dated 26 October 2026](validation-2026-10-26.json): 48 unit, business-rule and mocked-HTTP tests passed across the delivery assistant, inventory agent and MCP toolkit. The delivery assistant also passed 20 deterministic offline cases, and the MCP server passed a separate STDIO integration check. These checks use practice data and make no live model calls; they do not measure live model quality or production performance.
 
 ## Recorded project checks
@@ -12,8 +14,11 @@
 | Inventory MCP toolkit | [Release validation](../inventory-mcp-starter/VALIDATION.json): 13 business/configuration tests; STDIO integration and review CLI checks passed | Deterministic business rules, proposal persistence, review boundaries and protocol integration |
 | Inventory agent | Reproducible local tests in `test_agent.py` and `test_subagents.py` | Business rules and scripted/fake-model tool-loop boundaries |
 | Retail dashboard | SQL and application source with explicit data-quality and demand-source flags | Reviewable implementation; no live cloud or trained-forecast result is included |
+| Vector RAG / AWS Bedrock | [Tests](../vector-rag-lab/test_rag.py) and [ten retrieval cases](../vector-rag-lab/cases.json) | Chunk/source integrity, abstention, citation boundaries, embedding dimensions and real AWS SDK request/response contracts with Stubber |
 
 The JSON records are retained evidence from the original project validation. They are not a fresh live cloud benchmark. All included examples are offline or mocked. Human review of generated prose and live service quality is still a separate evaluation task.
+
+The vector-case criterion is whether the expected policy appears in the top three retrieved chunks, or the retriever abstains for the supplied out-of-scope case. It is not an end-to-end LLM accuracy score. The local TF-IDF threshold is a heuristic; a different corpus or dense embedding backend needs separate labelled evaluation. The fixed cases can detect regressions but are too small to establish general model quality.
 
 ## Live evaluation procedure
 
